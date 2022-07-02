@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "closestwins-app": "https://github.com/grishasergii/closestwins-app.git",
+    "closestwins-storage": "https://github.com/grishasergii/closestwins-storage.git",
+    "closestwins-api": "https://github.com/grishasergii/closestwins-api.git"
+  }
+}
