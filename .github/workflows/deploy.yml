@@ -28,7 +28,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.aws_access_key_id }}
           aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
-          aws-region: ${{ secrets.aws_region }}
+          aws-region: ${{ secrets.aws_closestwins_region }}
       - run: cd ./closestwins-storage
         name: Change working directory to closestwins-storage
       - uses: ./closestwins-storage/actions/deploy
