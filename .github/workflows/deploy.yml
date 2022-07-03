@@ -29,9 +29,10 @@ jobs:
           aws-access-key-id: ${{ secrets.aws_access_key_id }}
           aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
           aws-region: ${{ secrets.aws_region }}
+      - run: cd ./closestwins-storage
+        name: Change working directory to closestwins-storage
       - uses: ./closestwins-storage/actions/deploy
         name: Deploy Storage stack
-        working-directory: ./closestwins-storage
         with:
           branch: ${{ github.event.inputs.branch }}
           environment: ${{ github.event.inputs.environment }}
