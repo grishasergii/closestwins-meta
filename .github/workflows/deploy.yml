@@ -10,25 +10,14 @@ on:
         description: Environment name
 
 jobs:
-  deploy:
-    name: Deploy closest wins stacks
+  deploy-storage:
+    name: Deploy closest wins storage stack
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./closestwins-storage
     steps:
       - uses: actions/checkout@v2
-        name: Checkout meta repo
-      - uses: actions/setup-node@v2
-        name: Setup Node.js
+        name: Checkout closestwins storage repo
         with:
-          node-version: 17
-      - run: npm i -g meta
-        name: Install meta
-      - run: meta git update
-        name: Clone all repositories
-      - run: meta exec "git checkout ${{ github.event.inputs.branch }}"
-        name: Checkout branch in all meta repos
+          name: grishasergii/closestwins-storage
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_CLOSESTWINS_ACCESS_KEY_ID }}
