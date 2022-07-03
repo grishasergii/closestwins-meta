@@ -14,10 +14,10 @@ jobs:
     name: Deploy closest wins storage stack
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         name: Checkout closestwins storage repo
         with:
-          name: grishasergii/closestwins-storage
+          repository: grishasergii/closestwins-storage
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_CLOSESTWINS_ACCESS_KEY_ID }}
