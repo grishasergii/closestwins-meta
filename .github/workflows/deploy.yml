@@ -26,9 +26,9 @@ jobs:
         name: Checkout all meta repos
       - uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.aws_access_key_id }}
-          aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
-          aws-region: ${{ secrets.aws_closestwins_region }}
+          aws-access-key-id: ${{ secrets.AWS_CLOSESTWINS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_CLOSESTWINS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_CLOSESTWINS_REGION }}
       - run: cd ./closestwins-storage
         name: Change working directory to closestwins-storage
       - uses: ./closestwins-storage/actions/deploy
@@ -36,6 +36,6 @@ jobs:
         with:
           branch: ${{ github.event.inputs.branch }}
           environment: ${{ github.event.inputs.environment }}
-          aws_artifacts_bucket: ${{ secrets.aws_artifacts_bucket }}
-          aws_cfn_bucket: ${{ secrets.aws_cfn_bucket }}
-          aws_region: ${{ secrets.aws_region }}
+          aws_artifacts_bucket: ${{ secrets.AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
+          aws_cfn_bucket: ${{ secrets.AWS_CLOSESTWINS_CFN_BUCKET }}
+          aws_region: ${{ secrets.AWS_CLOSESTWINS_REGION }}
