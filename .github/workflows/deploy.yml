@@ -17,29 +17,31 @@ jobs:
       aws_access_key_id: ${{ secrets.AWS_CLOSESTWINS_ACCESS_KEY_ID }}
       aws_secret_access_key: ${{ secrets.AWS_CLOSESTWINS_SECRET_ACCESS_KEY }}
       aws_region: ${{ secrets.AWS_CLOSESTWINS_REGION }}
-      artifacts_bucket: ${{ secrets.AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
-      cfn_bucket: ${{ secrets.AWS_CLOSESTWINS_CFN_BUCKET }}
+      aws_artifacts_bucket: ${{ secrets.AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
+      aws_cfn_bucket: ${{ secrets.AWS_CLOSESTWINS_CFN_BUCKET }}
       map_api_key: ${{ secrets.MAP_API_KEY }}
     steps:
       - uses: actions/checkout@v2
+        name: Checkout meta repo
       - uses: actions/setup-node@v2
+        name: Setup Node.js
         with:
           node-version: 17
       - run: npm i -g meta
         name: Install meta
       - run: meta exec "git checkout ${{ github.event.inputs.branch }}"
-      - uses: ./closestwins-storage/.github/workflows/deploy.yml
+        name: Checkout all meta repos
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.aws_access_key_id }}
+          aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
+          aws-region: ${{ secrets.aws_region }}
+      - uses: ./closestwins-storage/actions/deploy
         name: Deploy Storage stack
+        working-directory: ./closestwins-storage
         with:
           branch: ${{ github.event.inputs.branch }}
           environment: ${{ github.event.inputs.environment }}
-      - uses: ./closestwins-api/.github/workflows/deploy.yml
-        name: Deploy API stack
-        with:
-          branch: ${{ github.event.inputs.branch }}
-          environment: ${{ github.event.inputs.environment }}
-      - uses: ./closestwins-app/.github/workflows/deploy.yml
-        name: Deploy APP stack
-        with:
-          branch: ${{ github.event.inputs.branch }}
-          environment: ${{ github.event.inputs.environment }}
+          aws_artifacts_bucket: ${{ secrets.aws_artifacts_bucket }}
+          aws_cfn_bucket: ${{ secrets.aws_cfn_bucket }}
+          aws_region: ${{ secrets.aws_region }}
