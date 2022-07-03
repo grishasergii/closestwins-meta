@@ -13,6 +13,9 @@ jobs:
   deploy:
     name: Deploy closest wins stacks
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./closestwins-storage
     steps:
       - uses: actions/checkout@v2
         name: Checkout meta repo
@@ -31,8 +34,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_CLOSESTWINS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_CLOSESTWINS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_CLOSESTWINS_REGION }}
-      - run: cd ./closestwins-storage
-        name: Change working directory to closestwins-storage
       - uses: ./closestwins-storage/actions/deploy
         name: Deploy Storage stack
         with:
