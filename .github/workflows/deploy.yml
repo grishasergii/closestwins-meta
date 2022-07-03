@@ -22,8 +22,10 @@ jobs:
           node-version: 17
       - run: npm i -g meta
         name: Install meta
+      - run: meta git update
+        name: Clone all repositories
       - run: meta exec "git checkout ${{ github.event.inputs.branch }}"
-        name: Checkout all meta repos
+        name: Checkout branch in all meta repos
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_CLOSESTWINS_ACCESS_KEY_ID }}
