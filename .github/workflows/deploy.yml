@@ -31,3 +31,52 @@ jobs:
           aws_artifacts_bucket: ${{ secrets.AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
           aws_cfn_bucket: ${{ secrets.AWS_CLOSESTWINS_CFN_BUCKET }}
           aws_region: ${{ secrets.AWS_CLOSESTWINS_REGION }}
+  
+  deploy-api:
+    name: Deploy closest wins API stack
+    needs:
+      - deploy-storage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout closestwins storage repo
+        with:
+          repository: grishasergii/closestwins-api
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_CLOSESTWINS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_CLOSESTWINS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_CLOSESTWINS_REGION }}
+      - uses: ./actions/deploy
+        name: Deploy API stack
+        with:
+          branch: ${{ github.event.inputs.branch }}
+          environment: ${{ github.event.inputs.environment }}
+          aws_artifacts_bucket: ${{ secrets.AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
+          aws_cfn_bucket: ${{ secrets.AWS_CLOSESTWINS_CFN_BUCKET }}
+          aws_region: ${{ secrets.AWS_CLOSESTWINS_REGION }}
+
+  deploy-app:
+    name: Deploy closest wins App stack
+    needs:
+      - deploy-storage
+      - deploy-api
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout closestwins app repo
+        with:
+          repository: grishasergii/closestwins-app
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_CLOSESTWINS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_CLOSESTWINS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_CLOSESTWINS_REGION }}
+      - uses: ./actions/deploy
+        name: Deploy App stack
+        with:
+          branch: ${{ github.event.inputs.branch }}
+          environment: ${{ github.event.inputs.environment }}
+          aws_artifacts_bucket: ${{ secrets.AWS_CLOSESTWINS_ARTIFACTS_BUCKET }}
+          aws_region: ${{ secrets.AWS_CLOSESTWINS_REGION }}
+          map_api_key: ${{ secrets.map_api_key }}
