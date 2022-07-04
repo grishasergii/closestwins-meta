@@ -42,7 +42,7 @@ jobs:
         name: Checkout closestwins api repo
         with:
           repository: grishasergii/closestwins-api
-          token: §{{ secrets.GH_ACCESS_TOKEN }}
+          ssh-key: §{{ secrets.DEPLOY_KEY }}
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_CLOSESTWINS_ACCESS_KEY_ID }}
