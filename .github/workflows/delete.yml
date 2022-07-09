@@ -14,11 +14,9 @@ jobs:
     name: Delete stack
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 1
       matrix:
-        stack_name:
-          - closestwins-storage-${{ github.event.inputs.branch }}-${{ github.event.inputs.environment }}
-          - closestwins-api-${{ github.event.inputs.branch }}-${{ github.event.inputs.environment }}
-          - closestwins-app-${{ github.event.inputs.branch }}-${{ github.event.inputs.environment }}
+        component: [storage, api, app]
     steps:
       - uses: actions/checkout@v3
       - uses: aws-actions/configure-aws-credentials@v1
@@ -27,6 +25,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_CLOSESTWINS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_CLOSESTWINS_REGION }}
       - name: Intiate delete stack
-        run: aws cloudformation delete-stack --stack-name ${{ martix.stack_name }}
+        run: aws cloudformation delete-stack --stack-name closestwins-${{ matrix.component }}-${{ github.event.inputs.branch }}-${{ github.event.inputs.environment }}
       - name: Wait for the delete confirmation
-        run: aws cloudformation wait stack-delete-complete --stack-name ${{ martix.stack_name }}
+        run: aws cloudformation wait stack-delete-complete --stack-name closestwins-${{ matrix.component }}-${{ github.event.inputs.branch }}-${{ github.event.inputs.environment }}
