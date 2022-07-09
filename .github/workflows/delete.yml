@@ -24,7 +24,9 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_CLOSESTWINS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_CLOSESTWINS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_CLOSESTWINS_REGION }}
+      - name: Set stack name
+        run: echo "STACK_NAME=closestwins-${{ matrix.component }}-${{ github.event.inputs.environment }}-${{ github.event.inputs.branch }}" >> $GITHUB_ENV
       - name: Intiate delete stack
-        run: aws cloudformation delete-stack --stack-name closestwins-${{ matrix.component }}-${{ github.event.inputs.branch }}-${{ github.event.inputs.environment }}
+        run: aws cloudformation delete-stack --stack-name $STACK_NAME
       - name: Wait for the delete confirmation
-        run: aws cloudformation wait stack-delete-complete --stack-name closestwins-${{ matrix.component }}-${{ github.event.inputs.branch }}-${{ github.event.inputs.environment }}
+        run: aws cloudformation wait stack-delete-complete --stack-name $STACK_NAME
