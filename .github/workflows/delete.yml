@@ -16,7 +16,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        component: [storage, api, app]
+        component: [app, api, storage]
     steps:
       - uses: aws-actions/configure-aws-credentials@v1
         with:
